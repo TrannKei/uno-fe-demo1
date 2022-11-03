@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
 import Winner from "./winner";
 
+import SendRequestFriend from "./addFriend";
+import ListFriend from "./friend";
+
 import { initializeGame, updateGame } from "../features/game/gameSlice";
 
 // import PACK_OF_CARDS from "../utils/packOfCards";
@@ -30,6 +33,8 @@ const Game = () => {
   // const {roomCode} = useSelector((state) => state.room);
   const { users } = useSelector((state) => state.room);
   const { gameOver, winner } = useSelector((state) => state.game);
+
+  const userId = user.id;
 
   const [text, setText] = useState(roomCode);
 
@@ -59,7 +64,6 @@ const Game = () => {
   // Listeners of socket instance
   useEffect(() => {
     socket.on("initGameState", (gameState) => {
-      console.log("Start the Game", gameState);
       dispatch(initializeGame(gameState));
     });
 
@@ -67,7 +71,6 @@ const Game = () => {
       dispatch(updateGame(gameState));
     });
     socket.on("roomData", (payload) => {
-      console.log("Got room data", payload);
       dispatch(updateUsers(payload));
     });
   }, []);
@@ -75,7 +78,6 @@ const Game = () => {
   const handleLeave = () => {
     dispatch(leaveRoom());
     const newUsers = users.filter(({ _id }) => user.id !== _id);
-    console.log("New users:", newUsers);
     socket.emit("leaving", newUsers);
     navigate("/");
   };
@@ -154,7 +156,7 @@ const Game = () => {
                 <h3>Mã phòng: {roomCode}</h3>
               </div>
             </Tooltip>
-            <div style={{width: "90px"}}></div>
+            <div style={{ width: "90px" }}></div>
           </div>
           <div className="wait-member-aria">
             {users.map((user) => (
@@ -166,6 +168,9 @@ const Game = () => {
                   <div>
                     <h2>{user.userName}</h2>
                   </div>
+                  {/* {user._id !== userId && (
+                    <SendRequestFriend sendId={userId} feedBack={user._id} />
+                  )} */}
                 </div>
               </div>
             ))}
@@ -180,6 +185,7 @@ const Game = () => {
         <Board socket={socket} handleStart={handleStart} />
       )}
       {/* <ChatBox onSendMessage={sendMessage} /> */}
+      <ListFriend/>
     </>
   );
 };

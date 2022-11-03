@@ -61,6 +61,18 @@ export const deleteUser = createAsyncThunk('user/delUser', async (_, thunkAPI) =
     }
 })
 
+export const sendRequest= createAsyncThunk('user/add', async(user, thunkAPI)=>{
+    try {
+        return await userService.add(user)
+    } catch(err){
+        const message =
+            (err.response && err.response.data && err.response.data.message)
+            || err.message
+            || err.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
 const userSlice = createSlice({
     name: 'user',
     initialState,

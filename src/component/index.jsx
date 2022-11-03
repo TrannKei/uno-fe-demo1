@@ -13,7 +13,7 @@ function Index() {
   // register
   // guest
 
-  console.log(statusIndex);
+  console.log(user);
   return (
     <>
       <div className="bg">

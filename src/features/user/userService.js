@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:5000/api/users/";
+const API_URL = "https://uno-be-demo2.herokuapp.com/api/users/";
 
 const register = async (userData) => {
     const response = await axios.post(API_URL, userData);
@@ -33,10 +33,16 @@ const deleteUser = async (id) => {
     return response.data;
 }
 
+const add = async (userData)=>{
+    const response = await axios.post(API_URL + 'add', userData)
+    return response.data;
+
+}
 const userService = {
     register,
     login,
     createGuest,
-    deleteUser
+    deleteUser,
+    add
 }
 export default userService;
